@@ -1,3 +1,4 @@
+#include <map>
 #include <core/issue/IssueHandlerStruct.h>
 #include <core/issue/filter/UniqueFilter.h>
 
@@ -12,7 +13,7 @@ UniqueFilter::~UniqueFilter() {
 }
 
 TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
-	std::vector<int> hashes;
+	std::map<int, int> duplicates;
 	TUIssuesMap filteredMap;
 	for (auto& unit : map) {
 		TranslationUnitIssues& filteredUnit =
@@ -22,18 +23,18 @@ TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
 		}
 		for (auto& issue : unit.second.Issues) {
 			int h = issue->hash();
-			auto result = std::find(hashes.begin(), hashes.end(), h);
-			if (result == hashes.end()) {
+			if (duplicates.find(h) == duplicates.end()) {
 				filteredUnit.Issues.push_back(issue);
-				hashes.push_back(h);
+				duplicates[h] = 0;
 			} else {
-				// TODO mark duplicate
+				duplicates[h]++;
 			}
 		}
 		if (!filteredUnit.Issues.empty()) {
 			filteredMap.erase(unit.second.MainSourceFile);
 		}
 	}
+	// TODO: What happens to the meta data?
 	return filteredMap;
 
 }
