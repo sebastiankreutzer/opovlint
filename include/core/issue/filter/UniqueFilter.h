@@ -5,13 +5,12 @@
 
 namespace opov {
 
-class UniqueFilter : public IFilter
-{
+class UniqueFilter: public IFilter {
 public:
-    UniqueFilter();
-    virtual ~UniqueFilter();
+	UniqueFilter();
+	virtual ~UniqueFilter();
 
-    virtual TUIssuesMap apply(const TUIssuesMap& map) override;
+	virtual TUIssuesMap apply(const TUIssuesMap& map) override;
 };
 
 }
