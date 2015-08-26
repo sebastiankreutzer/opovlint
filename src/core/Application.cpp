@@ -14,6 +14,7 @@
 #include <core/logging/Logger.h>
 #include <core/transformation/TransformationHandler.h>
 #include <core/utility/Util.h>
+#include <core/issue/filter/IFilter.h>
 
 #include <external/ReplacementHandling.h>
 

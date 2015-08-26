@@ -1,19 +1,21 @@
-#include "core/issue/filter/StatelessFilter.h"
+#include <core/issue/filter/StatelessFilter.h>
 
 namespace opov {
 
-TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
+TUIssuesMap StatelessFilter::apply(const TUIssuesMap& map) {
     TUIssuesMap filteredMap;
     for (auto& unit : map) {
-        TranslationUnitIssues filteredUnit;
-        filteredUnit.MainSourceFile = unit.MainSourceFile;
-        for (auto& issue : unit.Issues) {
-            if (filter(issue)) {
+        TranslationUnitIssues& filteredUnit = filteredMap[unit.second.MainSourceFile];
+        if (filteredUnit.MainSourceFile.empty()) {
+        	filteredUnit.MainSourceFile = unit.second.MainSourceFile;
+        }
+        for (auto& issue : unit.second.Issues) {
+            if (filter(*issue)) {
                 filteredUnit.Issues.push_back(issue);
             }
         }
         if (!filteredUnit.Issues.empty()) {
-            filteredMap.insert(filteredUnit);
+            filteredMap.erase(unit.second.MainSourceFile);
         }
     }
     return filteredMap;

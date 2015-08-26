@@ -13,6 +13,8 @@
 #include <AnalyzerFactory.h>
 #include <core/utility/Util.h>
 #include <core/issue/IssueHandler.h>
+#include <core/issue/filter/IFilter.h>
+#include <core/issue/filter/TrueFilter.h>
 #include <core/transformation/TransformationHandler.h>
 #include <modules/ImplicitCondition.h>
 #include <modules/ExplicitCast.h>
@@ -45,7 +47,8 @@ void OpOvApp::createReporter() {
 }
 
 void OpOvApp::createFilter() {
-
+	// TODO Customize filtering
+	filter = opov::util::make_unique<opov::TrueFilter>();
 }
 
 void OpOvApp::createFactory() {

@@ -12,8 +12,6 @@ public:
     virtual ~UniqueFilter();
 
     virtual TUIssuesMap apply(const TUIssuesMap& map) override;
-
-    int hashIssue(const Issue& issue);
 };
 
 }

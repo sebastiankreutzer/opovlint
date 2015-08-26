@@ -8,6 +8,7 @@
 #ifndef ISSUE_H_
 #define ISSUE_H_
 
+#include <functional>
 #include "map/PropertyMap.h"
 
 namespace opov {
@@ -21,6 +22,16 @@ public:
 	}
 	const property_map& properties() {
 		return _properties;
+	}
+
+	int hash() {
+		// FIXME: Use correct properties for uniqueness
+		int hash = 7;
+		hash = 17 * hash + getLineStart();
+		hash = 17 * hash + getColumnStart();
+		hash = 17 * hash + std::hash<std::string>()(getFile());
+		hash = 17 * hash + std::hash<std::string>()(getModuleName());
+		return hash;
 	}
 
 	int IssueProperty(LineStart);

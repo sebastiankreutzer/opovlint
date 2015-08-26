@@ -1,5 +1,5 @@
-#include "core/issue/IssueHandlerStruct.h"
-#include "core/issue/filter/UniqueFilter.h"
+#include <core/issue/IssueHandlerStruct.h>
+#include <core/issue/filter/UniqueFilter.h>
 
 namespace opov {
 
@@ -12,25 +12,30 @@ UniqueFilter::~UniqueFilter() {
 }
 
 TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
-    TUIssuesMap filteredMap;
-    std::vector<int> hashes;
-    for (auto& unit : map) {
-        TranslationUnitIssues filteredUnit;
-        filteredUnit.MainSourceFile = unit.MainSourceFile;
-        for (auto& issue : unit.Issues) {
-            int hash = hashIssue(issue);
-            if (std::find(hashes.begin(), hashes.end(), hash)) {
-                // TODO mark duplicate
-            } else {
-                filteredUnit.Issues.push_back(issue);
-                hashes.push_back(hash);
-            }
-        }
-        if (!filteredUnit.Issues.empty()) {
-            filteredMap.insert(filteredUnit);
-        }
-    }
-    return filteredMap;
+	std::vector<int> hashes;
+	TUIssuesMap filteredMap;
+	for (auto& unit : map) {
+		TranslationUnitIssues& filteredUnit =
+				filteredMap[unit.second.MainSourceFile];
+		if (filteredUnit.MainSourceFile.empty()) {
+			filteredUnit.MainSourceFile = unit.second.MainSourceFile;
+		}
+		for (auto& issue : unit.second.Issues) {
+			int h = issue->hash();
+			auto result = std::find(hashes.begin(), hashes.end(), h);
+			if (result == hashes.end()) {
+				filteredUnit.Issues.push_back(issue);
+				hashes.push_back(h);
+			} else {
+				// TODO mark duplicate
+			}
+		}
+		if (!filteredUnit.Issues.empty()) {
+			filteredMap.erase(unit.second.MainSourceFile);
+		}
+	}
+	return filteredMap;
+
 }
 
 }

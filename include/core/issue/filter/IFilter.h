@@ -6,8 +6,8 @@
 
 namespace opov {
 
-class IFilter
-{
+class IFilter {
+public:
     virtual ~IFilter() {};
     virtual TUIssuesMap apply(const TUIssuesMap& map) = 0;
 };

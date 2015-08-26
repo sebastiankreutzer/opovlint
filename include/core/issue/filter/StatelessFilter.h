@@ -1,14 +1,16 @@
 #ifndef STATELESS_FILTER_H
 #define STATELESS_FILTER_H
 
+#include "IFilter.h"
+
 namespace opov {
 
 class StatelessFilter : public IFilter {
-    virtual TUIssueMap apply(const TUIssueMap& map);
-
-    virtual bool filter(const Issue& issue);
+public:
+    virtual TUIssuesMap apply(const TUIssuesMap& map);
+    virtual bool filter(const Issue& issue) const = 0;
 };
 
 }
 
-#endif STATELESS_FILTER
+#endif
