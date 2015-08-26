@@ -44,6 +44,10 @@ void OpOvApp::createReporter() {
 	reporter = opov::util::make_unique<opov::CSVReporter>();
 }
 
+void OpOvApp::createFilter() {
+
+}
+
 void OpOvApp::createFactory() {
 	executor = opov::util::make_unique<opov::AnalyzerFactory>(config.get(),
 									ihandler.get(), thandler.get());

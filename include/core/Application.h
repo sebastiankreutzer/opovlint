@@ -27,6 +27,7 @@ class IssueReporter;
 class IssueHandler;
 class TransformationHandler;
 class Module;
+class IFilter;
 
 class Application {
 protected:
@@ -36,11 +37,14 @@ protected:
 	std::unique_ptr<clang::tooling::FrontendActionFactory> actionFactory;
 	std::unique_ptr<IssueHandler> ihandler;
 	std::unique_ptr<TransformationHandler> thandler;
+	std::unique_ptr<IFilter> filter;
 	std::vector<Module*> modules;
 
 	virtual void loadConfig() = 0;
 
 	virtual void createReporter() = 0;
+
+	virtual void createFilter() = 0;
 
 	virtual void createIssueHandler();
 

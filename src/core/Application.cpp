@@ -79,7 +79,10 @@ int Application::execute(const clang::tooling::CompilationDatabase& db,
 		}
 	}
 
-	reporter->addIssues(ihandler->getAllIssues());
+	TUIssuesMap &issuesMap = ihandler->getAllIssues();
+	TUIssuesMap filteredMap = filter->apply(issuesMap);
+
+	reporter->addIssues(filteredMap);
 	ihandler->clear();
 /*
 	replacementHandler.setDestinationDir(replacement_loc);

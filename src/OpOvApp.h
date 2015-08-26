@@ -18,6 +18,7 @@ private:
 protected:
 	void loadConfig() override;
 	void createReporter() override;
+	void createFilter() override;
 	void createFactory() override;
 	void initModules() override;
 public:
