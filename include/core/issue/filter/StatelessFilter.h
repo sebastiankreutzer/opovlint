@@ -7,8 +7,9 @@ namespace opov {
 
 class StatelessFilter : public IFilter {
 public:
-    virtual TUIssuesMap apply(const TUIssuesMap& map);
-    virtual bool filter(const Issue& issue) const = 0;
+	virtual ~StatelessFilter() {};
+    virtual FilterIssueMap apply(const FilterIssueMap& map);
+    virtual bool filter(const FilterIssue& issue) const = 0;
 };
 
 }

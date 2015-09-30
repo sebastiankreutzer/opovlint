@@ -1,7 +1,7 @@
 #ifndef IFILTER_H
 #define IFILTER_H
 
-#include "core/issue/IssueHandlerStruct.h"
+#include "core/issue/filter/FilterIssueStruct.h"
 #include "core/issue/Issue.h"
 
 namespace opov {
@@ -9,7 +9,7 @@ namespace opov {
 class IFilter {
 public:
     virtual ~IFilter() {};
-    virtual TUIssuesMap apply(const TUIssuesMap& map) = 0;
+    virtual FilterIssueMap apply(const FilterIssueMap& map) = 0;
 };
 
 }

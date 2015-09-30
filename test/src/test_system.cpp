@@ -128,3 +128,11 @@ TEST_CASE("TransformationHandle", "[thandle]") {
 		//REQUIRE(handle->getAllReplacements().size() == 1);
     }
 }
+
+TEST_CASE("Filter", "[filter]") {
+	opov::test::TestApp app(conf);
+	app.init();
+	SECTION("Accept everything") {
+
+	}
+}

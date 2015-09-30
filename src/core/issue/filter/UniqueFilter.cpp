@@ -12,9 +12,22 @@ UniqueFilter::~UniqueFilter() {
 
 }
 
-TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
+FilterIssueMap UniqueFilter::apply(const FilterIssueMap& map) {
 	std::map<int, int> duplicates;
-	TUIssuesMap filteredMap;
+
+	FilterIssueMap filteredMap;
+
+	for (auto& filterIssue : map) {
+		int h = filterIssue.second.issue->hash();
+		if (duplicates.find(h) == duplicates.end()) {
+			filteredMap[filterIssue.first] = filterIssue.second;
+			duplicates[h] = 0;
+		} else {
+			duplicates[h]++;
+		}
+	}
+
+	/*TUIssuesMap filteredMap;
 	for (auto& unit : map) {
 		TranslationUnitIssues& filteredUnit =
 				filteredMap[unit.second.MainSourceFile];
@@ -33,7 +46,7 @@ TUIssuesMap UniqueFilter::apply(const TUIssuesMap& map) {
 		if (!filteredUnit.Issues.empty()) {
 			filteredMap.erase(unit.second.MainSourceFile);
 		}
-	}
+	}*/
 	// TODO: What happens to the meta data?
 	return filteredMap;
 

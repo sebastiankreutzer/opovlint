@@ -14,6 +14,7 @@
 #include <core/configuration/JSONConfiguration.h>
 #include <AnalyzerFactory.h>
 #include <core/issue/IssueHandler.h>
+#include <core/issue/filter/TrueFilter.h>
 #include <core/transformation/TransformationHandler.h>
 #include "MockReporter.h"
 
@@ -48,6 +49,10 @@ protected:
 		executor->init();
 	}
 
+	void createFilter() {
+		filter = opov::util::make_unique<TrueFilter>();
+	}
+
 public:
 	TestApp(std::string conf_file=conf) : conf_file(conf_file) {
 
@@ -59,6 +64,10 @@ public:
 
 	TransformationHandler* getHandler() {
 		return reinterpret_cast<TransformationHandler* >(thandler.get());
+	}
+
+	IFilter* getFilter() {
+		return reinterpret_cast<IFilter*>(filter.get());
 	}
 
 	virtual void initModules() {};

@@ -7,7 +7,7 @@ namespace opov {
 
 class TrueFilter: public StatelessFilter {
 public:
-	virtual bool filter(const Issue& issue) const {
+	virtual bool filter(const FilterIssue& issue) const {
 		return true;
 	}
 };

@@ -15,6 +15,7 @@
 #include <core/transformation/TransformationHandler.h>
 #include <core/utility/Util.h>
 #include <core/issue/filter/IFilter.h>
+#include <core/issue/filter/Filtering.h>
 
 #include <external/ReplacementHandling.h>
 
@@ -81,7 +82,9 @@ int Application::execute(const clang::tooling::CompilationDatabase& db,
 	}
 
 	TUIssuesMap &issuesMap = ihandler->getAllIssues();
-	TUIssuesMap filteredMap = filter->apply(issuesMap);
+
+	Filtering filtering(nullptr); // FIXME Obviously
+	TUIssuesMap filteredMap = filtering.filter(issuesMap);
 
 	reporter->addIssues(filteredMap);
 	ihandler->clear();
