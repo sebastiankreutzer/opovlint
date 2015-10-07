@@ -134,32 +134,15 @@ TEST_CASE("TransformationHandle", "[thandle]") {
 
 // Isolated filtering test cases (does not test system as a whole)
 TEST_CASE("Filter", "[filter]") {
-	opov::test::TestApp app(conf);
-	app.init();
 
 	std::shared_ptr<opov::Issue> issue1 = std::make_shared<opov::Issue>();
 	issue1->setModuleName("TestModule1");
-	opov::FilterIssue filterIssue1;
-	filterIssue1.id = 0;
-	filterIssue1.issue = issue1;
-
 
 	std::shared_ptr<opov::Issue> issue2 = std::make_shared<opov::Issue>();
 	issue2->setModuleName("TestModule2");
-	opov::FilterIssue filterIssue2;
-	filterIssue1.id = 1;
-	filterIssue1.issue = issue2;
 
 	std::shared_ptr<opov::Issue> issue1Clone = std::make_shared<opov::Issue>();
 	issue1Clone->setModuleName("TestModule1");
-	opov::FilterIssue filterIssue1Clone;
-	filterIssue1.id = 2;
-	filterIssue1.issue = issue1Clone;
-
-	opov::FilterIssueMap map;
-	map[0] = filterIssue1;
-	map[1] = filterIssue2;
-	map[2] = filterIssue1Clone;
 
 	SECTION("Issue hashing") {
 		int h1 = issue1->hash();
@@ -169,15 +152,25 @@ TEST_CASE("Filter", "[filter]") {
 		REQUIRE(h1 == h3);
 	}
 
-	SECTION("Accept everything") {
-		opov::TrueFilter trueFilter;
-		opov::FilterIssueMap result = trueFilter.apply(map);
-		REQUIRE(result.size() == 3);
-	}
-
 	SECTION("Unique Filter") {
-		opov::UniqueFilter uniqueFilter;
-		opov::FilterIssueMap result = uniqueFilter.apply(map);
-		REQUIRE(result.size() == 2);
+		opov::test::TestApp app(conf);
+		app.init();
+		app.setFilter(new opov::UniqueFilter());
+
+		app.getIssueHandler()->addIssue(issue1);
+		app.getIssueHandler()->addIssue(issue2);
+		app.getIssueHandler()->addIssue(issue1Clone);
+
+		app.executeOnCode("");
+		auto filteredIssues = app.getReporter()->issues;
+		REQUIRE(filteredIssues.size() == 2);
+
+		bool issue1Found = false;
+		for (auto issue: filteredIssues) {
+			if (issue->hash() == issue1->hash()) {
+				REQUIRE(!issue1Found);
+				issue1Found = true;
+			}
+		}
 	}
 }

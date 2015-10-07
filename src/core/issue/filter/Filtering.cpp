@@ -3,6 +3,8 @@
 #include <core/issue/filter/FilterIssueStruct.h>
 #include <core/issue/filter/IFilter.h>
 
+#include <iostream>
+
 namespace opov {
 
 Filtering::Filtering(IFilter* mainFilter) : mainFilter(mainFilter) {
@@ -13,9 +15,7 @@ Filtering::~Filtering() {
 
 TUIssuesMap Filtering::filter(const TUIssuesMap& unfilteredIssues) {
 
-
 	//First give all issues a unique ID
-
 	FilterIssueMap filterIssueMap;
 	int id = 0;
     for (auto& unit : unfilteredIssues) {
@@ -28,12 +28,14 @@ TUIssuesMap Filtering::filter(const TUIssuesMap& unfilteredIssues) {
         }
     }
 
-    // Filtering
+    if (!mainFilter) {
+    	std::cout << "Filter is nullptr" << std::endl;
+    }
 
+    // Filtering
 	FilterIssueMap filteredMap = mainFilter->apply(filterIssueMap);
 
 	// Transform map back into previous format
-
 	TUIssuesMap resultMap;
 
 	for (auto& filterIssue : filteredMap) {

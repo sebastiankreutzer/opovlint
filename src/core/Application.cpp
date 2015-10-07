@@ -39,6 +39,7 @@ void Application::init() {
 	loadConfig();
 	createIssueHandler();
 	createTransformationHandler();
+	createFilter();
 	createReporter();
 	createFactory();
 	initModules();
@@ -131,7 +132,7 @@ int Application::executeOnCode(const std::string& source, // TODO Update accordi
 	Filtering filtering(filter);
 	TUIssuesMap filteredMap = filtering.filter(issuesMap);
 
-	reporter->addIssues(ihandler->getAllIssues());
+	reporter->addIssues(filteredMap);
 	ihandler->clear();
 
 	return sig;
@@ -144,7 +145,7 @@ void Application::addModule(Module* module) {
 }
 
 void Application::cleanUp() {
-	//delete filter;
+	delete filter;
 	for(auto module : modules) {
 		delete module;
 	}

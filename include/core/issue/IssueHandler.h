@@ -31,6 +31,7 @@ public:
 	void setSource(const std::string& source);
 	template<typename T>
 	void addIssue(const clang::SourceManager& sm, const clang::ASTContext& ac, T node, const std::string& module, const std::string& module_descr, std::string message="");
+	void addIssue(std::shared_ptr<Issue> issue); // For testing purposes, when no ASTContext etc. is available
 	TUIssuesMap& getAllIssues();
 	void clear();
 	virtual ~IssueHandler();

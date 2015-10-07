@@ -66,6 +66,10 @@ public:
 		return reinterpret_cast<TransformationHandler* >(thandler.get());
 	}
 
+	IssueHandler* getIssueHandler() {
+		return reinterpret_cast<IssueHandler*>(ihandler.get());
+	}
+
 	IFilter* getFilter() {
 		return filter;
 	}
