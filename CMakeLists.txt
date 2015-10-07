@@ -23,6 +23,9 @@ src/core/issue/IssueHandler.cpp
 src/core/reporting/ConsoleReporter.cpp
 src/core/reporting/CSVReporter.cpp
 src/core/transformation/TransformationHandler.cpp
+src/core/issue/filter/StatelessFilter.cpp
+src/core/issue/filter/UniqueFilter.cpp
+src/core/issue/filter/Filtering.cpp
 )
 
 
