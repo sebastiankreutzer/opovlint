@@ -12,6 +12,9 @@
 #include <core/module/ASTMatcherModule.h>
 #include <core/configuration/JSONConfiguration.h>
 #include <modules/ExplicitCast.h>
+#include <core/issue/filter/TrueFilter.h>
+#include <core/issue/filter/UniqueFilter.h>
+#include <core/issue/filter/Filtering.h>
 
 #include <string>
 #include <memory>
@@ -129,10 +132,52 @@ TEST_CASE("TransformationHandle", "[thandle]") {
     }
 }
 
+// Isolated filtering test cases (does not test system as a whole)
 TEST_CASE("Filter", "[filter]") {
 	opov::test::TestApp app(conf);
 	app.init();
-	SECTION("Accept everything") {
 
+	std::shared_ptr<opov::Issue> issue1 = std::make_shared<opov::Issue>();
+	issue1->setModuleName("TestModule1");
+	opov::FilterIssue filterIssue1;
+	filterIssue1.id = 0;
+	filterIssue1.issue = issue1;
+
+
+	std::shared_ptr<opov::Issue> issue2 = std::make_shared<opov::Issue>();
+	issue2->setModuleName("TestModule2");
+	opov::FilterIssue filterIssue2;
+	filterIssue1.id = 1;
+	filterIssue1.issue = issue2;
+
+	std::shared_ptr<opov::Issue> issue1Clone = std::make_shared<opov::Issue>();
+	issue1Clone->setModuleName("TestModule1");
+	opov::FilterIssue filterIssue1Clone;
+	filterIssue1.id = 2;
+	filterIssue1.issue = issue1Clone;
+
+	opov::FilterIssueMap map;
+	map[0] = filterIssue1;
+	map[1] = filterIssue2;
+	map[2] = filterIssue1Clone;
+
+	SECTION("Issue hashing") {
+		int h1 = issue1->hash();
+		int h2 = issue2->hash();
+		int h3 = issue1Clone->hash();
+		REQUIRE(h1 != h2);
+		REQUIRE(h1 == h3);
+	}
+
+	SECTION("Accept everything") {
+		opov::TrueFilter trueFilter;
+		opov::FilterIssueMap result = trueFilter.apply(map);
+		REQUIRE(result.size() == 3);
+	}
+
+	SECTION("Unique Filter") {
+		opov::UniqueFilter uniqueFilter;
+		opov::FilterIssueMap result = uniqueFilter.apply(map);
+		REQUIRE(result.size() == 2);
 	}
 }

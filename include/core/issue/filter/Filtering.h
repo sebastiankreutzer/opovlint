@@ -9,7 +9,7 @@ class IFilter;
 
 class Filtering {
 public:
-	Filtering(IFilter* mainFilter);
+	Filtering(IFilter* mainFilter); // TODO Change to some kind of smart pointer
 	~Filtering();
 
 	TUIssuesMap filter(const TUIssuesMap& unfilteredMap);

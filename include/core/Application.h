@@ -37,10 +37,16 @@ protected:
 	std::unique_ptr<clang::tooling::FrontendActionFactory> actionFactory;
 	std::unique_ptr<IssueHandler> ihandler;
 	std::unique_ptr<TransformationHandler> thandler;
-	std::unique_ptr<IFilter> filter;
+
+	// Unique pointer does not make sense here, since the filter is possibly passed to different objects.
+	// Shared pointer is possible, but is more inconvenient in this case than a raw pointer.
+	IFilter* filter;
+
 	std::vector<Module*> modules;
 
 	virtual void loadConfig() = 0;
+
+	//virtual void createConsumer() = 0;
 
 	virtual void createReporter() = 0;
 

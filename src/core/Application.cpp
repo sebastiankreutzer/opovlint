@@ -61,6 +61,16 @@ void Application::createTransformationHandler() {
 int Application::execute(const clang::tooling::CompilationDatabase& db,
 		const std::vector<std::string>& sources) {
 	clang::tooling::ClangTool tool(db, sources);
+
+	/*
+	 * Insert diagnostics handler with tool.setDiagnosticsHandler() here.
+	 * TextDiagnosticsBuffer can be used as reference.
+	 *
+	 * Questions:
+	 * What to do with diagnostics?
+	 * Combine with reporting?
+	 */
+
 	ReplacementHandling replacementHandler;
 	std::string replacement_loc;
 	bool apply_replacements;
@@ -83,7 +93,7 @@ int Application::execute(const clang::tooling::CompilationDatabase& db,
 
 	TUIssuesMap &issuesMap = ihandler->getAllIssues();
 
-	Filtering filtering(nullptr); // FIXME Obviously
+	Filtering filtering(filter);
 	TUIssuesMap filteredMap = filtering.filter(issuesMap);
 
 	reporter->addIssues(filteredMap);
@@ -103,7 +113,7 @@ int Application::execute(const clang::tooling::CompilationDatabase& db,
 	return sig;
 }
 
-int Application::executeOnCode(const std::string& source,
+int Application::executeOnCode(const std::string& source, // TODO Update according to other execute function
 		const std::vector<std::string>& args) {
 	int sig = 0;
 	for(auto module : modules) {
@@ -115,6 +125,11 @@ int Application::executeOnCode(const std::string& source,
 			return sig;
 		}
 	}
+
+	TUIssuesMap &issuesMap = ihandler->getAllIssues();
+
+	Filtering filtering(filter);
+	TUIssuesMap filteredMap = filtering.filter(issuesMap);
 
 	reporter->addIssues(ihandler->getAllIssues());
 	ihandler->clear();
@@ -129,6 +144,7 @@ void Application::addModule(Module* module) {
 }
 
 void Application::cleanUp() {
+	//delete filter;
 	for(auto module : modules) {
 		delete module;
 	}

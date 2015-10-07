@@ -48,7 +48,7 @@ void OpOvApp::createReporter() {
 
 void OpOvApp::createFilter() {
 	// TODO Customize filtering
-	filter = opov::util::make_unique<opov::TrueFilter>();
+	filter = new opov::TrueFilter();
 }
 
 void OpOvApp::createFactory() {

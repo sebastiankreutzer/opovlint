@@ -13,6 +13,7 @@ Filtering::~Filtering() {
 
 TUIssuesMap Filtering::filter(const TUIssuesMap& unfilteredIssues) {
 
+
 	//First give all issues a unique ID
 
 	FilterIssueMap filterIssueMap;

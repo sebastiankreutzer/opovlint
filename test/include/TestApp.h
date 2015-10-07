@@ -50,7 +50,7 @@ protected:
 	}
 
 	void createFilter() {
-		filter = opov::util::make_unique<TrueFilter>();
+		filter = new TrueFilter();
 	}
 
 public:
@@ -67,7 +67,11 @@ public:
 	}
 
 	IFilter* getFilter() {
-		return reinterpret_cast<IFilter*>(filter.get());
+		return filter;
+	}
+
+	void setFilter(IFilter* filter) {
+		this->filter = filter;
 	}
 
 	virtual void initModules() {};
